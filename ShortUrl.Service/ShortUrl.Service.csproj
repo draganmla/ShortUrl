@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ShortUrl.Model\ShortUrl.Model.csproj" />
+    <ProjectReference Include="..\ShortUrl.Repository\ShortUrl.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
