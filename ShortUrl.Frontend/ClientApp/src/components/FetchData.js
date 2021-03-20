@@ -5,7 +5,7 @@ export class FetchData extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { urls: [], loading: true };
+        this.state = { urls: [], loading: true, err: null };
     }
 
     componentDidMount() {
@@ -13,11 +13,16 @@ export class FetchData extends Component {
         fetch(url).then(response => {
             return response.json()
         }).then(data => {
-            this.setState({ urls: data, loading: false });
-        })
+            this.setState({ urls: data, loading: false, err: null });
+        }).catch(error => {
+            alert(
+                "An error occurred while trying to fetch data from WEB API: " +
+                error
+            );
+        });
     }
 
-    static renderForecastsTable(urls) {
+    static renderForecastsTable(urls, err) {
         return (
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
@@ -29,7 +34,7 @@ export class FetchData extends Component {
                 <tbody>
                     {urls.map(url =>
                         <tr key={url.id}>
-                            <td><a href={process.env.REACT_APP_API_URL+"/" + url.shortURL}>{"http://drgn.ly/" + url.shortURL}</a></td>
+                            <td><a href={process.env.REACT_APP_API_URL + "/" + url.shortURL}>{"http://drgn.ly/" + url.shortURL}</a></td>
                             <td>{url.longURL}</td>
                         </tr>
                     )}

@@ -11,8 +11,8 @@ export class Home extends Component {
                 <h1>Hello, world!</h1>
                 <p>Welcome to your new single-page application, built with react:</p>
 
-                <p><ShortenUrl /></p>
-                <p>Shortened urls are generted from {process.env.REACT_APP_API_URL}</p>
+                <ShortenUrl />
+                <p>Shortened urls are generted from <a href={process.env.REACT_APP_API_URL}>WEB API</a></p>
             </div>
         );
     }

@@ -7,7 +7,8 @@ export default class ShortenUrl extends Component {
         super(props);
         this.state = {
             LongUrlValue: "",
-            ShortenedUrl: ""
+            ShortenedUrl: "",
+            Errors: null,
         }
     }
 
@@ -19,6 +20,7 @@ export default class ShortenUrl extends Component {
         this.setState({ LongUrlValue: e.target.value });
     }
 
+
     onClickSubmit = () => {
         const url = process.env.REACT_APP_API_URL
 
@@ -27,12 +29,21 @@ export default class ShortenUrl extends Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ LongURL: this.state.LongUrlValue })
         };
-        console.log(url);
+
         fetch(url, requestOptions)
-            .then(response => response.json())
-            .then(data => this.setState({ LongUrlValue: data.model.longURL, ShortenedUrl: data.model.shortURL }));
+            .then(response => {
+                if (response.ok) {
+                    response.json()
+                        .then(data => this.setState({ LongUrlValue: data.model.longURL, ShortenedUrl: data.model.shortURL, Errors: null }))
+                } else {
+                    response.json()
+                        .then(data => data.errors).
+                        then(errors => this.setState({ LongUrlValue: "", ShortenedUrl: "", Errors: JSON.stringify(errors) }))
+                }
+            })
     }
     render() {
+        const { Errors } = this.state;
 
         return (
             <div>
@@ -41,13 +52,13 @@ export default class ShortenUrl extends Component {
                         type="text"
                         value={this.state.LongUrlValue}
                         onChange={this.handleChange.bind(this)}
-                        placeholder="Write a URL..."
+                        placeholder="http://www.example.com"
                     />
                     <button onClick={this.onClickSubmit}>
                         Submit
                     </button>
                 </div>
-                <div><a href={process.env.REACT_APP_API_URL + "/" + this.state.ShortenedUrl}>{"http://drgn.ly/" + this.state.ShortenedUrl}</a></div>
+                { Errors ? <div>{this.state.Errors}</div> : <div><a href={process.env.REACT_APP_API_URL + "/" + this.state.ShortenedUrl}>{"http://drgn.ly/" + this.state.ShortenedUrl}</a></div>}
             </div>
         )
     }
