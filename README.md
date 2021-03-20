@@ -1,4 +1,4 @@
-# ASP.NET Core MVC URL Shortener
+# ASP.NET Core/React URL Shortener
 A basic implementation of an URL shortener web application using ASP.NET Core MVC and Entity Framework Core.
 
 ## Goal
