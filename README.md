@@ -11,9 +11,9 @@ Implement an URL shortener application .
 ## Implementation
 
 ShortUrl.API is a ASP.NET Core that hosts 3 methods:
-	- Get method to get already shortened URLs
-	- Get method for redirect towards to full urls
-	- Post method for generating short Url
+* Get method to get already shortened URLs
+* Get method for redirect towards to full urls
+* Post method for generating short Url
 
 ShortUrl.Frontend
 	React Web app to generate short urls
