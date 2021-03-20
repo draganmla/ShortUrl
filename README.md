@@ -23,8 +23,10 @@ ShortUrl.Frontend
 First, you have to type `dotnet restore` in order to retrieve the dependancies of the project.
 
 
-The projet is using SQLite as DB backed. The data file is named `shorturls.db` by default.
+The project is using SQLite as DB backed. The data file is named `shorturls.db` by default.
 
 In order to init the DB schema, you have to rune the command `dotnet ef database update`.
 
-Then, simply type `dotnet run` on your command prompt and then browse to http://localhost:5000.
+Then, simply type `dotnet run` on your command prompt and then browse to http://localhost:5000/api/shorturl.
+
+To start the  front end go to ShortUrl.Frontend.ClientApp and run `npm start`
