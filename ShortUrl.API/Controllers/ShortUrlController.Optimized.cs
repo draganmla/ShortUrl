@@ -230,7 +230,6 @@ namespace ShortUrl.API.Controllers
                 var stats = new
                 {
                     totalUrls = allUrls.Count(),
-                    createdToday = allUrls.Count(u => u.CreatedDate?.Date == DateTime.UtcNow.Date),
                     topDomains = allUrls
                         .Where(u => Uri.TryCreate(u.LongURL, UriKind.Absolute, out var uri))
                         .GroupBy(u => new Uri(u.LongURL).Host)

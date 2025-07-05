@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Caching.Memory;
 using ShortUrl.API.Extensions;
 using ShortUrl.Repository;
 using System;
@@ -32,6 +33,10 @@ namespace ShortUrl.API
             services.AddDbContext<UriDbContext>(options => options.UseSqlite("Filename=./shorturls.db"));
             services.RegisterDependencies(Configuration);
 
+            // Add caching services for performance optimization
+            services.AddResponseCaching();
+            services.AddMemoryCache();
+
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
@@ -51,6 +56,10 @@ namespace ShortUrl.API
 
             app.UseRouting();
             app.UseCors();
+            
+            // Add response caching middleware
+            app.UseResponseCaching();
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
