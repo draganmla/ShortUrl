@@ -49,20 +49,51 @@ namespace ShortUrl.Service
             }
         }
 
-        // Async implementations for better performance
+        // Improved async implementations using proper async repository methods
         public async Task<IEnumerable<ShortURLModel>> GetCollectionFromDataStoreAsync()
         {
-            return await Task.FromResult(_shortUrlRepository.GetCollectionFromDataStore());
+            return await _shortUrlRepository.GetCollectionFromDataStoreAsync();
         }
 
         public async Task<ShortURLModel> GetItemFromDataStoreAsync(string shortUrl)
         {
-            return await Task.FromResult(_shortUrlRepository.GetItemFromDataStoreByShortUrl(shortUrl));
+            return await _shortUrlRepository.GetItemFromDataStoreByShortUrlAsync(shortUrl);
         }
 
         public async Task<ShortUrlResponseModel> SaveItemToDataStoreAsync(ShortURLRequestModel model)
         {
-            return await Task.FromResult(SaveItemToDataStore(model));
+            // Check if URL already exists using async method
+            ShortURLModel previouslySaved = await _shortUrlRepository.GetItemFromDataStoreByLongUrlAsync(model.LongURL);
+            if (previouslySaved != null)
+            {
+                return new ShortUrlResponseModel 
+                { 
+                    Model = previouslySaved, 
+                    Success = true, 
+                    Message = "This url has been saved previously" 
+                };
+            }
+
+            // Save new URL using async method
+            ShortURLModel modelToSave = ShortUrlModelMapper.MapRequestModelToDBModel(model);
+            ShortURLModel savedModel = await _shortUrlRepository.SaveItemToDataStoreAsync(modelToSave);
+
+            if (savedModel != null)
+            {
+                return new ShortUrlResponseModel
+                {
+                    Model = savedModel,
+                    Success = true,
+                    Message = "Saved successfully"
+                };
+            }
+
+            return new ShortUrlResponseModel
+            {
+                Model = null,
+                Success = false,
+                Message = "Failed to save URL"
+            };
         }
     }
 }
